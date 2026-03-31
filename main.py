@@ -16,6 +16,7 @@
 
 # ft.app(main_page)
 
+
 import flet as ft
 
 def main_page(page: ft.Page):
@@ -24,7 +25,7 @@ def main_page(page: ft.Page):
 
     count = 0  
 
-    text_hello = ft.Text('Нажато: 0 раз', size=20)
+    text_hello = ft.Text('Нажато: 0 раз', size=40)
 
     def on_click(e):
         nonlocal count
@@ -41,7 +42,7 @@ def main_page(page: ft.Page):
     button = ft.ElevatedButton(
         'Нажми меня',
         icon=ft.Icons.ADD,
-        icon_color=ft.Colors.GREEN,
+        icon_color=ft.Colors.PURPLE,
         on_click=on_click
     )
 
