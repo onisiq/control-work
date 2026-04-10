@@ -1,4 +1,6 @@
 import flet as ft
+from datetime import datetime
+import random
 
 def main_page(page: ft.Page):
     page.title = 'Мое первое приложение'
@@ -8,12 +10,17 @@ def main_page(page: ft.Page):
     history_text = ft.Text(value='История приветствий: ')
     greeting_history = []
 
+    name_input = ft.TextField(label='Введите имя', expand=True)
+
+    history_visible = True
+
     def on_button_click(e):
         name = name_input.value
         if name:
-            text_hello.value = 'Hello ' + name
+            current_time = datetime.now().strftime("%Y:%m:%d - %H:%M:%S")
+            text_hello.value = f"{current_time} - Привет, {name}!"
             name_input.value = ''
-            greeting_history.append(name)
+            greeting_history.append(f"{current_time} - {name}")
             history_text.value = 'История приветствий\n' + '\n'.join(greeting_history)
         else:
             text_hello.value = 'Введите имя'
@@ -27,55 +34,27 @@ def main_page(page: ft.Page):
             page.theme_mode = ft.ThemeMode.LIGHT
         page.update()
 
-        name_input = ft.TextField(label='Введите имя', expand=True)
+    def random_name(e):
+        names = ["Алексей", "Мария", "Иван", "Ольга", "Дмитрий", "Анна"]
+        name_input.value = random.choice(names)
+        page.update()
 
-        button = ft.ElevatedButton('send', on_click=on_button_click)
+    def toggle_history(e):
+        nonlocal history_visible
+        history_visible = not history_visible
+        history_text.visible = history_visible
+        page.update()
 
-        theme_btn = ft.IconButton(icon=ft.Icons.BRIGHTNESS_6, on_click=change_theme)
+    button = ft.ElevatedButton('send', on_click=on_button_click)
+    theme_btn = ft.IconButton(icon=ft.Icons.BRIGHTNESS_6, on_click=change_theme)
 
-        header = ft.Row([ft.Text('Мое приложение'), theme_btn])
+    random_btn = ft.TextButton('Случайное имя', on_click=random_name)
+    toggle_btn = ft.TextButton('Скрыть/Показать историю', on_click=toggle_history)
 
-        row = ft.Row([name_input, button])
+    header = ft.Row([ft.Text('Мое приложение'), theme_btn])
+    row = ft.Row([name_input, button])
+    extra_row = ft.Row([random_btn, toggle_btn])
 
-        page.add(header, text_hello, row, history_text)
+    page.add(header, text_hello, row, extra_row, history_text)
 
 ft.app(main_page)
-# ft.app(main_page, view=ft.AppView.WEB_BROWSER)
-# ft.app(main_page, view=ft.AppView.WEB_BROWSER)
-# ft.app(main_page, view=ft.AppView.WEB_BROWSER)
-
-# import flet as ft
-
-# def main_page(page: ft.Page):
-#     page.title = 'Счётчик'
-#     page.theme_mode = ft.ThemeMode.SYSTEM
-
-#     count = 0  
-
-#     text_hello = ft.Text('Нажато: 0 раз', size=40)
-
-#     def on_click(e):
-#         nonlocal count
-#         count += 1
-#         text_hello.value = f'Нажато: {count} раз'
-#         page.update()  
-
-#     def on_reset(e):
-#         nonlocal count
-#         count = 0
-#         text_hello.value = 'Нажато: 0 раз'
-#         page.update()
-
-#     button = ft.ElevatedButton(
-#         'Нажми меня',
-#         icon=ft.Icons.ADD,
-#         icon_color=ft.Colors.PURPLE,
-#         on_click=on_click
-#     )
-
-#     reset_button = ft.TextButton('сбросить', on_click=on_reset)
-
-#     page.add(text_hello, button, reset_button)
-
-# ft.app(main_page)
-
